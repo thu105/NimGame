@@ -24,12 +24,17 @@ The Answers and Questions should be related to things you have learned in this c
 Samples Answers and Questions:
 
 Answer:		The connection control mechanism that is negotiated between a client and server
+
 Question:	What is Flow Control?
 
+
 Answer: 	The process of establishing a TCP connection
+
 Question:	What is the Three Way Handshake?
 
+
 Answer:		The protocol for communication between two email servers
+
 Question:	What is SMTP?
 or
 Queston:	What is simple Mail Transfer Protocol?
