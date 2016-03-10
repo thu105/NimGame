@@ -14,9 +14,13 @@ Make all your changes to the new files. Do not edit the original files so they c
 Deliverables:
 
 Submission 1.	Three clients connect to the server and are identified with names.  Clients are notified which number they are when they connect.  
+
 Submission 2.	Server sends an "Answer" to the three clients and recognizes which client "buzzes in" first.
+
 Submission 3.	Client sends a "Question" to the server and the server determines whether or not it is correct.
+
 Submission 4.	Server conducts a 10 question round and displays the sores of all the contestants after each round.
+
 Submission 5.	Add as much additional functionality as you can to make it a complete Jeopardy game.  This can include Categories with the ability of the contestant controlling the board to choose a category, the ability of a contestant to choose the dollar amount of a questions, Daily Doubles, and a Double Jeopardy round.
 
 The Answers and Questions should be related to things you have learned in this course.
