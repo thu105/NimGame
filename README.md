@@ -1,6 +1,10 @@
 # NimGame
 This repo contains programs to implement a multi-threaded TCP game called Nim 
 
+
+* Roles:
+ * Hein Thu: NimClient, ClientListener, NimBoard
+ * Eila Eiroa: NimServer, ClientHandler
 * NimClient.java handles the Nim board from the client's side and inputs of the client
 * ClientListener.java recieves responses from the server (the other player) and changes the Nim board
 * NimServer.java listens for client connections and creates a ClientHandler for each new client
