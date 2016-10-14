@@ -15,8 +15,7 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
 * NIM GAME RULES
   * The Nim board will contain three heaps of three, four, and five virtual coins respectively.
   * There are two players and each will take turn removing ANY amount of coins from a single heap.
-  * The person that makes the last move (removes the last coin) wins this round and he/she will start the next round.
-  * The winner will be the best of five rounds.
+  * The person that makes the last move (removes the last coin) wins the game.
 
 * NIM SERVER
   * The server will be hosting multiple Nim games at once.
