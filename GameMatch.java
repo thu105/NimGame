@@ -1,5 +1,4 @@
 import java.net.Socket;
-import NimGame;
 
 class GameMatch(Socket, Socket, NimGame) {
   public final Socket first;
