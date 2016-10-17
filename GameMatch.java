@@ -13,4 +13,11 @@ class GameMatch(Socket, Socket, NimGame) {
   public boolean hasSocket(Socket soc) {
     return ((first==soc)||(second==soc));
   }
+  public Socket getOtherSocket(Socket soc){\\get the socket of other player, return null if the given socket is not in the GameMatch
+    if(soc==first)
+      return second;
+    else if(soc==second)
+      return first;
+    else
+      return Null;
 }
