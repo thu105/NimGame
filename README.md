@@ -17,17 +17,28 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * The person that makes the last move (removes the last coin) wins the game.
 
 * NIM SERVER
-  * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedClient, Socket unpairedSocket, Socket connectionSocket, ServerSocket serverSoct, ClientHandler handler
+  * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedPlayer, Socket player1, Socket player2, ServerSocket serverSoct, ClientHandler handler
   * Assign default values:
     * matches = new ArrayList\<GameMatch>();
-    * hasUnpairedClient=false;
-    * unpairedSocket= null;
-    * connectionSocket= null;
+    * hasUnpairedPlayer=false;
+    * player1= null;
+    * player2= null;
   * Prints "Waiting for client connections on port 7654."
   * Create ServerSocket(7654)
-  * Listening stage starting here will repeat forever unless ended by user
-  * Listen for client connections on that socket
-  * 
+  * Listening stage starting here will repeat forever until terminated by user
+    * Listen for client connections on that socket
+    * Assign the new client socket to player2
+    * Check if the socket already exist in the matches list. (use hasSocket(Socket soc) with a loop)
+      * if it is already in the list, start new thread of ClientHandler passing in player2, and matches
+    * Else if hasUnpairedPlayer is false
+      * player1=player2
+      * hasUnpairedPlayer=true
+    * Else
+      * Create a new NimGame called game
+      * Create a new GameMatch called match with player1, player2, and game
+      * Add match into matches list
+      * start new thread of ClientHandler passing in player1, and matches
+    
 
 * NIM CLIENT
   * Member variables: String rules, String myUsername, String opUsername, String serverReply, String userInput
