@@ -24,6 +24,7 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * starts game
   * it works connecting two clients to form one game at a time
   * need to write code for multiple players at once, but I wasn't able to figure it out
+  *
   * psudocode:
   * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedPlayer, Socket player1, Socket player2, ServerSocket     serverSoct, ClientHandler handler
   * Assign default values:
@@ -99,3 +100,4 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
 * List of unfinished features:
   * NimClient.java is in the process
   * Will implement an AI for clients to play against if there is enough time.
+  * I'm not sure what the ClientHandler has to do that it doesn't already do 
