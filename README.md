@@ -3,7 +3,7 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
 
 
 * Roles:
- * Hein Thu: NimClient, NimServer, NimBoard, GameMatch (ClientListener is not needed because it is a turn-based game and the client only play one game at once)
+ * Hein Thu: NimClient, NimBoard, GameMatch (ClientListener is not needed because it is a turn-based game and the client only play one game at once)
  * Eila Eiroa: NimServer, ClientHandler
 * NimClient.java handles the inputs of the client and prints out the board
 * NimServer.java listens for client connections and creates a ClientHandler for each new client
@@ -16,9 +16,16 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * The Nim board will contain three heaps of three, four, and five virtual coins respectively.
   * There are two players and each will take turn removing ANY amount of coins from a single heap.
   * The person that makes the last move (removes the last coin) wins the game.
-
+  
 * NIM SERVER
-  * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedPlayer, Socket player1, Socket player2, ServerSocket serverSoct, ClientHandler handler
+  * NimServer
+  * connects players together
+  * picks one of them at random to start
+  * starts game
+  * it works connecting two clients to form one game at a time
+  * need to write code for multiple players at once, but I wasn't able to figure it out
+  * psudocode:
+  * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedPlayer, Socket player1, Socket player2, ServerSocket     serverSoct, ClientHandler handler
   * Assign default values:
     * matches = new ArrayList\<GameMatch>();
     * hasUnpairedPlayer=false;
@@ -91,5 +98,4 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * NimBoard.java is implemented.
 * List of unfinished features:
   * NimClient.java is in the process
-  * Have not started on NimServer.java and ClientHandler.java
   * Will implement an AI for clients to play against if there is enough time.
