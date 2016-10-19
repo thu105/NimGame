@@ -3,12 +3,13 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
 
 
 * Roles:
- * Hein Thu: NimClient, NimServer, NimBoard (ClientListener is not needed because it is a turn-based game and the client only play one game at once)
+ * Hein Thu: NimClient, NimServer, NimBoard, GameMatch (ClientListener is not needed because it is a turn-based game and the client only play one game at once)
  * Eila Eiroa: NimServer, ClientHandler
 * NimClient.java handles the inputs of the client and prints out the board
 * NimServer.java listens for client connections and creates a ClientHandler for each new client
-* ClientHandler.java recieves messages from a client and relays it to the other clients.
+* ClientHandler.java take a message from a player, make a move on the NimBoard, and send the resulting board to both players
 * NimBoard.java handles the Nim game and its rules
+* GameMatch.java groups up two clients and one nim game so that server can manage each game easier
 
 
 * NIM GAME RULES
@@ -42,6 +43,8 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
 
 * NIM CLIENT
   * Member variables: String rules, String myUsername, String opUsername, String serverReply, String userInput
+  * Asks user for server address (user can input nothing if the server is localhost)
+  * Establish a connection to the server.
   * Prints out the rules of the game
   * Asks the user to input a username to identify himself/herself
   * Connects to the server by sending "HELLO [username]" and listen from server
@@ -83,4 +86,10 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
       * ask user if he wants to play again
         * if yes, make new connection and repeat the entire move
         * if no, end the client program
-
+* List of features implemented:
+  * GameMatch.java is implemented. (More documentations will be added later)
+  * NimBoard.java is implemented.
+* List of unfinished features:
+  * NimClient.java is in the process
+  * Have not started on NimServer.java and ClientHandler.java
+  * Will implement an AI for clients to play against if there is enough time.
