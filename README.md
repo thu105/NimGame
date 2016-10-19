@@ -28,7 +28,7 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * Listening stage starting here will repeat forever until terminated by user
     * Listen for client connections on that socket
     * Assign the new client socket to player2
-    * Check if the socket already exist in the matches list. (use hasSocket(Socket soc) with a loop)
+    * Check if the socket already exist in the matches list. (use hasSocket(Socket soc) within a loop)
       * if it is already in the list, start new thread of ClientHandler passing in player2, and matches
     * Else if hasUnpairedPlayer is false
       * player1=player2
