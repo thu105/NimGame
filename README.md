@@ -26,29 +26,43 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * need to write code for multiple players at once, but I wasn't able to figure it out
   *
   * psudocode:
-  * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedPlayer, Socket player1, Socket player2, ServerSocket     serverSoct, ClientHandler handler
+  * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedPlayer, Socket player1, Socket player2, ServerSocket     serverSoct, ClientHandler handler, String firPlayer, String secPlayer
   * Assign default values:
     * matches = new ArrayList\<GameMatch>();
     * hasUnpairedPlayer=false;
     * player1= null;
     * player2= null;
+    * firstPlayer= "";
+    * secondPlayer= "";
   * Prints "Waiting for client connections on port 7654."
   * Create ServerSocket(7654)
   * Listening stage starting here will repeat forever until terminated by user
     * Listen for client connections on that socket
     * Assign the new client socket to player2
     * Check if the socket already exist in the matches list. (use hasSocket(Socket soc) within a loop)
-      * if it is already in the list, start new thread of ClientHandler passing in player2, and matches
+      * if it is already in the list, start new thread of ClientHandler passing in the GameMatch it was in
     * Else if hasUnpairedPlayer is false
+      * Check if the message starts with "HELLO "
+      * If false, continue (go to next loop)
+      * Send "100" back to player2
+      * Get username for firstPlayer
       * player1=player2
       * hasUnpairedPlayer=true
     * Else
+      * Check if the message starts with "HELLO "
+      * If false, continue (go to next loop)
+      * Get username for secondPlayer
+      * Send "200 "+firstPlayer to player2
+      * Send "200 "+secondPlayer to player1
       * Create a new NimGame called game
+      * Send game.toString() to player1
+      * Send game.toString() to player2
       * Create a new GameMatch called match with player1, player2, and game
       * Add match into matches list
-      * start new thread of ClientHandler passing in player1, and matches
+      * start new thread of ClientHandler passing in the current GameMatch
     
-
+* ClientHandler
+  *
 * NIM CLIENT
   * Member variables: String rules, String myUsername, String opUsername, String serverReply, String userInput
   * Asks user for server address (user can input nothing if the server is localhost)
