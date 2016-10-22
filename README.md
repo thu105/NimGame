@@ -40,12 +40,13 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
     * Listen for client connections on that socket
     * Assign the new client socket to player2
     * Check if the socket already exist in the matches list. (use hasSocket(Socket soc) within a loop)
-      * if it is already in the list, start new thread of ClientHandler passing in the GameMatch it was in
+      * if it is already in the list, start new thread of ClientHandler passing in Socket player2 and the matches list
     * Else if hasUnpairedPlayer is false
       * Check if the message starts with "HELLO "
       * If false, continue (go to next loop)
       * Send "100" back to player2
       * Get username for firstPlayer
+      * print firstPlayer+" has connected."
       * player1=player2
       * hasUnpairedPlayer=true
     * Else
@@ -54,15 +55,54 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
       * Get username for secondPlayer
       * Send "200 "+firstPlayer to player2
       * Send "200 "+secondPlayer to player1
+      * print firstPlayer+" was paired with "+secondPlayer+"."
       * Create a new NimGame called game
       * Send game.toString() to player1
       * Send game.toString() to player2
       * Create a new GameMatch called match with player1, player2, and game
       * Add match into matches list
-      * start new thread of ClientHandler passing in the current GameMatch
+      * start new thread of ClientHandler passing in Socket player1 and the matches list
+      * run the thread
     
 * ClientHandler
-  *
+  * Member variables: Socket sender, Socket receiver, NimBoard board, GameMatch match, ArrayList\<GameMatch> matches
+  * Constructor: ClientHandler(Socket connectionSock, ArrayList\<GameMatch> matches)
+    * sender=connectionSock
+    * receiver=match.getOtherSocket()
+    * this.matches=matches
+    * loop through matches to get a match that has Socket sender
+    * board= match.getBoard()
+  * run()
+    * try
+      * print "Getting a move from "+sender+"."
+      * create BufferedReader clientInput from Socket sender
+      * create DataOutputStream clientOutput1 for Socket sender
+      * create DataOutputStream clientOutput2 for Socket receiver
+      * takes in String input from clientInput
+      * print input
+      * convert input into int row
+      * takes in String input from clientInput again
+      * print input
+      * convert input into int count
+      * int result = board.makeChange(row,count)
+      * if result is 2
+        * print "Invalid move was made."
+        * convert result into a string and send it to clientOutput1
+        * also send board.toString() to clientOutput1
+      * if result is 0 or 1
+        * print "Updated the board according to the move."
+        * convert result into a string and send it to both clientOutput1 and clientOutput2
+        * also send board.toString() to both players
+      * if result is 1
+        * print sender+" had won the game."
+        * remove match from the matches list
+    * catch (Exception e)
+       * print "Error: "+e.toString();
+       * send "2" to clientOutput1
+       * send board.toString() to clientOutput1
+    * print "Closing the socket "+sender+"."
+    * close the socket
+      
 * NIM CLIENT
   * Member variables: String rules, String myUsername, String opUsername, String serverReply, String userInput
   * Asks user for server address (user can input nothing if the server is localhost)
@@ -87,8 +127,9 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
       * take second reply
       * print it
       * print "Congragulation! You won the game."
+      * close the connection
       * ask user if he wants to play again
-        * if yes, make new connection and repeat the entire move
+        * if yes, make new connection and repeat from sending "HELLO [username]" step
         * if no, end the client program
     * If server reply "2"
       * take second reply
