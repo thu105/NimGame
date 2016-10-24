@@ -68,16 +68,16 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * Member variables: Socket sender, Socket receiver, NimBoard board, GameMatch match, ArrayList\<GameMatch> matches
   * Constructor: ClientHandler(Socket connectionSock, ArrayList\<GameMatch> matches)
     * sender=connectionSock
-    * receiver=match.getOtherSocket()
     * this.matches=matches
     * loop through matches to get a match that has Socket sender
+    * receiver=match.getOtherSocket()
     * board= match.getBoard()
   * run()
+    * create DataOutputStream clientOutput1 for Socket sender
+    * create DataOutputStream clientOutput2 for Socket receiver
     * try
       * print "Getting a move from "+sender+"."
       * create BufferedReader clientInput from Socket sender
-      * create DataOutputStream clientOutput1 for Socket sender
-      * create DataOutputStream clientOutput2 for Socket receiver
       * takes in String input from clientInput
       * print input
       * convert input into int row
