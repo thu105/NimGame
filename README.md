@@ -1,5 +1,5 @@
 # NimGame
-This repo contains programs to implement a multi-threaded TCP game called Nim 
+This repo contains programs to implement a multi-threaded TCP game called Nim
 
 
 * Roles:
@@ -16,7 +16,7 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
   * The Nim board will contain three heaps of three, four, and five virtual coins respectively.
   * There are two players and each will take turn removing ANY amount of coins from a single heap.
   * The person that makes the last move (removes the last coin) wins the game.
-  
+
 * NIM SERVER
   * NimServer
   * connects players together
@@ -56,14 +56,14 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
       * Send "200 "+firstPlayer to player2
       * Send "200 "+secondPlayer to player1
       * print firstPlayer+" was paired with "+secondPlayer+"."
-      * Create a new NimGame called game
-      * Send game.toString() to player1
-      * Send game.toString() to player2
-      * Create a new GameMatch called match with player1, player2, and game
+      * Create a new NimBoard called board
+      * Send board.toString() to player1
+      * Send board.toString() to player2
+      * Create a new GameMatch called match with player1, player2, and board
       * Add match into matches list
       * start new thread of ClientHandler passing in Socket player1 and the matches list
       * run the thread
-    
+
 * ClientHandler
   * Member variables: Socket sender, Socket receiver, NimBoard board, GameMatch match, ArrayList\<GameMatch> matches
   * Constructor: ClientHandler(Socket connectionSock, ArrayList\<GameMatch> matches)
@@ -98,11 +98,8 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
         * remove match from the matches list
     * catch (Exception e)
        * print "Error: "+e.toString();
-       * send "2" to clientOutput1
-       * send board.toString() to clientOutput1
-    * print "Closing the socket "+sender+"."
-    * close the socket
-      
+       * remove the match from matches
+
 * NIM CLIENT
   * Member variables: String rules, String myUsername, String opUsername, String serverReply, String userInput
   * Asks user for server address (user can input nothing if the server is localhost)
@@ -126,10 +123,10 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
     * If server reply "1"
       * take second reply
       * print it
-      * print "Congragulation! You won the game."
+      * print "Congratulation! You won the game."
       * close the connection
       * ask user if he wants to play again
-        * if yes, make new connection and repeat from sending "HELLO [username]" step
+        * if yes, make new connection and repeat
         * if no, end the client program
     * If server reply "2"
       * take second reply
@@ -155,4 +152,4 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
 * List of unfinished features:
   * NimClient.java is in the process
   * Will implement an AI for clients to play against if there is enough time.
-  * I'm not sure what the ClientHandler has to do that it doesn't already do 
+  * I'm not sure what the ClientHandler has to do that it doesn't already do

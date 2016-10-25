@@ -7,7 +7,8 @@
  *
  */
 import java.net.Socket;
-import java.io.DataOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -16,58 +17,91 @@ import java.util.ArrayList;
 
 public class ClientHandler implements Runnable
 {
-	private Socket connectionSock = null;
-	private ArrayList<Socket> socketList;
+	private Socket sender = null, receiver=null;
+	private NimBoard board;
+	private GameMatch match;
+	private ArrayList<GameMatch> matches;
 
-	ClientHandler(Socket sock, ArrayList<Socket> socketList)
+	ClientHandler(Socket sender, ArrayList<GameMatch> matches)
 	{
-		this.connectionSock = sock;
-		this.socketList = socketList;	// Keep reference to master list
+		this.sender = sender;
+		this.matches = matches;	// Keep reference to master list
+		for(GameMatch gm: matches){
+			if(gm.hasSocket(sender)){
+				match=gm;
+				break;
+			}
+		}
+		receiver=match.getOtherSocket(sender);
+		board=match.getBoard();
 	}
 
-	public void run()
-	{
-        		// Get data from a client and send it to everyone else
-		try
-		{
-			System.out.println("Connection made with socket " + connectionSock);
-			BufferedReader clientInput = new BufferedReader(
-				new InputStreamReader(connectionSock.getInputStream()));
-			while (true)
-			{
-				// Get data sent from a client
-				String clientText = clientInput.readLine();
-				if (clientText != null)
-				{
-					System.out.println("Received: " + clientText);
-					// Turn around and output this data
-					// to all other clients except the one
-					// that sent us this information
-					for (Socket s : socketList)
-					{
-						if (s != connectionSock)
-						{
-							DataOutputStream clientOutput = new DataOutputStream(s.getOutputStream());
-							clientOutput.writeBytes(clientText + "\n");
-						}
-					}
+	public void run(){
+		Socket temp;
+		String input;
+		int row, count, result=0;
+		BufferedWriter outputToSender, outputToReceiver;
+		BufferedReader clientInput;
+
+		try{
+			while(true){
+				outputToSender = new BufferedWriter(new OutputStreamWriter(sender.getOutputStream()));
+				outputToReceiver = new BufferedWriter(new OutputStreamWriter(receiver.getOutputStream()));
+				clientInput = new BufferedReader(new InputStreamReader(sender.getInputStream()));
+				System.out.println("Connection made with socket " + sender);
+				input = clientInput.readLine();
+				System.out.println("Received: " + input);
+				row=Integer.parseInt(input);
+				input = clientInput.readLine();
+				System.out.println("Received: " + input);
+				count=Integer.parseInt(input);
+
+				result= board.makeChange(row,count);
+				if(result==2){
+					System.out.println("Invalid move was made.");
+					outputToSender.write("2\n");
+					outputToSender.flush();
+					outputToSender.write(board.toString());
+					outputToSender.flush();
+					continue;
 				}
-				else
-				{
-				  // Connection was lost
-				  System.out.println("Closing connection for socket " + connectionSock);
-				   // Remove from arraylist
-				   socketList.remove(connectionSock);
-				   connectionSock.close();
-				   break;
+				else if(result==1){
+					System.out.println(sender+" has won the game.");
+					outputToSender.write("1\n");
+					outputToSender.flush();
+					outputToSender.write(board.toString());
+					outputToSender.flush();
+					outputToReceiver.write("1\n");
+					outputToReceiver.flush();
+					outputToReceiver.write(board.toString());
+					outputToReceiver.flush();
+					sender.close();
+					receiver.close();
+					matches.remove(match);
+					break;
+				}
+				else{
+					System.out.println("Updated the board according to the changes.");
+					outputToSender.write("0\n");
+					outputToSender.flush();
+					outputToSender.write(board.toString());
+					outputToSender.flush();
+					outputToReceiver.write("0\n");
+					outputToReceiver.flush();
+					outputToReceiver.write(board.toString());
+					outputToReceiver.flush();
+					System.out.println("Switching between sender and reciever...");
+					temp=sender;
+					sender=receiver;
+					receiver=temp;
 				}
 			}
 		}
-		catch (Exception e)
-		{
+		catch (Exception e){
 			System.out.println("Error: " + e.toString());
 			// Remove from arraylist
-			socketList.remove(connectionSock);
+			matches.remove(match);
 		}
+		System.out.println("Ending a game between "+sender+" and "+receiver);
 	}
 } // ClientHandler for MTServer.java

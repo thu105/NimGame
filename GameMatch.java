@@ -1,19 +1,19 @@
 import java.net.Socket;
 
-class GameMatch(Socket, Socket, NimGame) {
+public class GameMatch{
   private final Socket first;
   private final Socket second;
   private NimBoard game;
 
-  public GameMatch(final Socket first, final Socket second, NigBoard game) {
+  public GameMatch(final Socket first, final Socket second, NimBoard game) {
     this.first = first;
     this.second = second;
     this.game = game;
   }
-  public boolean hasSocket(Socket soc) {\\check if the given socket is contained in this match
+  public boolean hasSocket(Socket soc) {
     return ((first==soc)||(second==soc));
   }
-  public Socket getOtherSocket(Socket soc){\\get the socket of other player, \return \null \if the given socket is not in the GameMatch
+  public Socket getOtherSocket(Socket soc) {
     if(soc==first)
       return second;
     else if(soc==second)
