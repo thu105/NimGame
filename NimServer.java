@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class NimServer{
   public static void main(String[] args){
+    //initiate vars
     Socket player1=null, player2=null;
     boolean hasUnpairedPlayer=false;
     ClientHandler handler=null;
@@ -15,10 +16,12 @@ public class NimServer{
     ServerSocket serverSock=null;
     BufferedReader clientInput1=null, clientInput2=null;
     BufferedWriter clientOutput1=null,clientOutput2=null;
+    
     try{
       System.out.println("Waiting for client connections on port 7654.");
       serverSock = new ServerSocket(7654);
       while(true){
+        //connect player 1
         player1=serverSock.accept();
         clientInput1 = new BufferedReader(new InputStreamReader(player1.getInputStream()));
         clientOutput1= new BufferedWriter(new OutputStreamWriter(player1.getOutputStream()));
@@ -29,7 +32,7 @@ public class NimServer{
             clientOutput1.flush();
             firstPlayer=input.substring(6);
             System.out.println(firstPlayer+" is connected and waiting for opponent.");
-
+        //connect player 2
             player2=serverSock.accept();
             clientInput2 = new BufferedReader(new InputStreamReader(player2.getInputStream()));
             clientOutput2= new BufferedWriter(new OutputStreamWriter(player2.getOutputStream()));
@@ -41,7 +44,8 @@ public class NimServer{
             clientOutput1.flush();
             clientOutput2.write("200 "+firstPlayer+"\n");
             clientOutput2.flush();
-
+          
+            //pair clients for game
             System.out.println(firstPlayer+" is paired with "+secondPlayer+".");
             NimBoard board = new NimBoard();
 
@@ -56,6 +60,7 @@ public class NimServer{
         }
       }
     }
+    //exception
     catch(IOException e){
       System.out.println(e.getMessage());
     }
