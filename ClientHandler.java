@@ -1,11 +1,10 @@
 /**
- * Coded by: Elia Eiroa, Hein Thu
- * ClientHandler.java
- *
- * This class handles one Nim game between two clients
- * The server host the game and two clients will take turn making moves
- * Each game run on seperate thread but all threads has a list of GameMatch to keep track of all the games
- */
+* Coded by: Elia Eiroa, Hein Thu
+* ClientHandler.java
+*
+* This class handles one Nim game between two clients
+* The server host the game and two clients will take turn making moves
+*/
 import java.net.Socket;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
@@ -20,43 +19,48 @@ public class ClientHandler implements Runnable
 	private Socket sender = null, receiver=null;
 	private NimBoard board;
 	private GameMatch match;
-	private ArrayList<GameMatch> matches;
 
-	ClientHandler(Socket sender, ArrayList<GameMatch> matches)
+	ClientHandler(Socket sender, Socket receiver, NimBoard board)
 	{
 		this.sender = sender;
-		this.matches = matches;	// Keep reference to master list of games
-		for(GameMatch gm: matches){
-			if(gm.hasSocket(sender)){
-				match=gm;
-				break;
-			}
-		}
-		receiver=match.getOtherSocket(sender);
-		board=match.getBoard();
+		this.receiver=receiver;
+		this.board=board;
 	}
 
 	public void run(){
-		Socket temp;
-		String input;
-		int row, count, result=0;
-		BufferedWriter outputToSender, outputToReceiver;
-		BufferedReader clientInput;
+		Socket temp=null;
+		String input="";
+		int row=0, count=0, result=0;
+		BufferedWriter outputToSender=null, outputToReceiver=null;
+		BufferedReader clientInput=null;
 
 		try{
 			while(true){
 				outputToSender = new BufferedWriter(new OutputStreamWriter(sender.getOutputStream()));
 				outputToReceiver = new BufferedWriter(new OutputStreamWriter(receiver.getOutputStream()));
 				clientInput = new BufferedReader(new InputStreamReader(sender.getInputStream()));
-				System.out.println("Connection made with socket " + sender);
-				input = clientInput.readLine();
-				System.out.println("Received: " + input);
-				row=Integer.parseInt(input);
-				input = clientInput.readLine();
-				System.out.println("Received: " + input);
-				count=Integer.parseInt(input);
+
+				System.out.println("Connection made with " + sender);
+
+					input = clientInput.readLine();
+					System.out.println("Received: " + input);
+					try{
+						row=Integer.parseInt(input);
+					}
+					catch(NumberFormatException e){
+						row=0;
+					}
+					input = clientInput.readLine();
+					System.out.println("Received: " + input);
+					try{
+						count=Integer.parseInt(input);
+					}
+					catch(NumberFormatException e){
+						count=0;
+					}
 
 				result= board.makeChange(row,count);
+
 				if(result==2){
 					System.out.println("Invalid move was made.");
 					outputToSender.write("2\n");
@@ -75,9 +79,13 @@ public class ClientHandler implements Runnable
 					outputToReceiver.flush();
 					outputToReceiver.write(board.toString());
 					outputToReceiver.flush();
+
+
+					outputToReceiver.close();
+					outputToSender.close();
+					clientInput.close();
 					sender.close();
 					receiver.close();
-					matches.remove(match);
 					break;
 				}
 				else{
@@ -99,8 +107,6 @@ public class ClientHandler implements Runnable
 		}
 		catch (Exception e){
 			System.out.println("Error: " + e.toString());
-			// Remove from arraylist
-			matches.remove(match);
 		}
 		System.out.println("Ending a game between "+sender+" and "+receiver);
 	}

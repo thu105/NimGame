@@ -2,16 +2,14 @@
 * NimBoard.java
 *
 * This class handles the rule and board of Nim game.
-* Takes in two ints that reperesent a move in the game.
+* Takes in two ints that reperesent a move in the game and return the result of that move.
 *
 */
 
-public class NimBoard
-{
+public class NimBoard{
 	private int[] board;
 
-	NimBoard()
-	{
+	NimBoard(){
 		board=new int[3];
 		board[0]=3;
 		board[1]=4;
@@ -21,9 +19,9 @@ public class NimBoard
 	public int makeChange(int row, int count)//Takes in two ints
 	//return 0 if the games continues, 1 if the games end, and 2 if there is an error
 	{
-		if (row>3)
+		if (row>3 || row==0)
 			return 2;
-		if (board[row-1]<count)
+		if (board[row-1]<count || count==0)
 			return 2;
 		board[row-1]-=count;
 

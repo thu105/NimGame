@@ -82,6 +82,7 @@ public class NimClient{
           System.out.println(serverReply);
           System.out.println("----------------------------");
         }
+        
         while(true){
           System.out.print("Please enter the row number you wished to change: ");
           userInput= keyboard.nextLine();
