@@ -36,10 +36,11 @@ public class ClientHandler implements Runnable
 
 		try{
 			while(true){
+				//get the output to sender and to receiver
 				outputToSender = new BufferedWriter(new OutputStreamWriter(sender.getOutputStream()));
 				outputToReceiver = new BufferedWriter(new OutputStreamWriter(receiver.getOutputStream()));
 				clientInput = new BufferedReader(new InputStreamReader(sender.getInputStream()));
-
+				// connection made with sender
 				System.out.println("Connection made with " + sender);
 
 					input = clientInput.readLine();
@@ -60,7 +61,7 @@ public class ClientHandler implements Runnable
 					}
 
 				result= board.makeChange(row,count);
-
+				//if result equals 2, the move is invalid 
 				if(result==2){
 					System.out.println("Invalid move was made.");
 					outputToSender.write("2\n");
@@ -69,6 +70,7 @@ public class ClientHandler implements Runnable
 					outputToSender.flush();
 					continue;
 				}
+				//when the result is 1, player wins
 				else if(result==1){
 					System.out.println(sender+" has won the game.");
 					outputToSender.write("1\n");
@@ -89,6 +91,7 @@ public class ClientHandler implements Runnable
 					break;
 				}
 				else{
+				//updated board message
 					System.out.println("Updated the board according to the changes.");
 					outputToSender.write("0\n");
 					outputToSender.flush();
@@ -105,6 +108,7 @@ public class ClientHandler implements Runnable
 				}
 			}
 		}
+		//exception handling
 		catch (Exception e){
 			System.out.println("Error: " + e.toString());
 		}
