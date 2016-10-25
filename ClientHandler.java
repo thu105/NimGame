@@ -17,8 +17,7 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable
 {
 	private Socket sender = null, receiver=null;
-	private NimBoard board;
-	private GameMatch match;
+	private NimBoard board= null;
 
 	ClientHandler(Socket sender, Socket receiver, NimBoard board)
 	{
