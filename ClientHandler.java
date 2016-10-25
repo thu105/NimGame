@@ -1,10 +1,10 @@
 /**
+ * Coded by: Elia Eiroa, Hein Thu
  * ClientHandler.java
  *
- * This class handles communication between the client
- * and the server.  It runs in a separate thread but has a
- * link to a common list of sockets to handle broadcast.
- *
+ * This class handles one Nim game between two clients
+ * The server host the game and two clients will take turn making moves
+ * Each game run on seperate thread but all threads has a list of GameMatch to keep track of all the games
  */
 import java.net.Socket;
 import java.io.OutputStreamWriter;
@@ -25,7 +25,7 @@ public class ClientHandler implements Runnable
 	ClientHandler(Socket sender, ArrayList<GameMatch> matches)
 	{
 		this.sender = sender;
-		this.matches = matches;	// Keep reference to master list
+		this.matches = matches;	// Keep reference to master list of games
 		for(GameMatch gm: matches){
 			if(gm.hasSocket(sender)){
 				match=gm;
@@ -104,4 +104,4 @@ public class ClientHandler implements Runnable
 		}
 		System.out.println("Ending a game between "+sender+" and "+receiver);
 	}
-} // ClientHandler for MTServer.java
+} // ClientHandler for NimServer.java
