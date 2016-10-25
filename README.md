@@ -11,21 +11,22 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
 * NimBoard.java handles the Nim game and its rules
 * GameMatch.java groups up two clients and one nim game so that server can manage each game easier
 
-
 * NIM GAME RULES
   * The Nim board will contain three heaps of three, four, and five virtual coins respectively.
   * There are two players and each will take turn removing ANY amount of coins from a single heap.
   * The person that makes the last move (removes the last coin) wins the game.
+  
+* List of features implemented:
+  * The server can handle multiple games at once
+  * The client can choose to play again
+* List of unfinished features:
+  * An AI was too complicated to integrate into the game. (Had to change the entire to implement an AI)
+  * It is only one game instead of best of five
+  * The user cannot quit midgame
 
+
+* THE PSEUDO CODE BELOW DOES NOT FULLY REFLECT THE PROGRAM. IT WAS A FIRST DRAFT.
 * NIM SERVER
-  * NimServer
-  * connects players together
-  * picks one of them at random to start
-  * starts game
-  * it works connecting two clients to form one game at a time
-  * need to write code for multiple players at once, but I wasn't able to figure it out
-  *
-  * psudocode:
   * Member variables: ArrayList\<GameMatch> matches, boolean hasUnpairedPlayer, Socket player1, Socket player2, ServerSocket     serverSoct, ClientHandler handler, String firPlayer, String secPlayer
   * Assign default values:
     * matches = new ArrayList\<GameMatch>();
@@ -146,10 +147,4 @@ This repo contains programs to implement a multi-threaded TCP game called Nim
       * ask user if he wants to play again
         * if yes, make new connection and repeat the entire move
         * if no, end the client program
-* List of features implemented:
-  * GameMatch.java is implemented. (More documentations will be added later)
-  * NimBoard.java is implemented.
-* List of unfinished features:
-  * NimClient.java is in the process
-  * Will implement an AI for clients to play against if there is enough time.
-  * I'm not sure what the ClientHandler has to do that it doesn't already do
+
